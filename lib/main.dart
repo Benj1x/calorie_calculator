@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
         page = FavoritesPage();
         break;
       case 2:
-        page = Placeholder();
+        page = SettingsPage();
         break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
@@ -191,12 +191,58 @@ class FavoritesPage extends StatelessWidget
   }
 }
 
-//class SettingsPage extends StatelessWidget{
-  /*@override
+class SettingsPage extends StatelessWidget{
+  @override
+
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-  }*/
-//}
+    var word = appState.current;
+
+
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('A gamer idea:'),
+            BigCard(word: word),
+            SizedBox(height: 10),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    appState.getNext();
+                  },
+                  child: Text("Save"),
+                ),
+                SomeTextField(),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SomeTextField extends StatelessWidget {
+  const SomeTextField({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(
+      width: 250,
+      child: TextField(
+        obscureText: false,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: 'Sheets',
+        ),
+      ),
+    );
+  }
+}
 
 class BigCard extends StatelessWidget {
   const BigCard({
