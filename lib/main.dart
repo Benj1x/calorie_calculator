@@ -65,6 +65,9 @@ class _MyHomePageState extends State<MyHomePage> {
       case 1:
         page = FavoritesPage();
         break;
+      case 2:
+        page = Placeholder();
+        break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
@@ -85,6 +88,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     NavigationRailDestination(
                       icon: Icon(Icons.favorite),
                       label: Text('Favorites'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.settings),
+                      label: Text('Settings'),
                     ),
                   ],
                   selectedIndex: selectedIndex,
@@ -184,6 +191,12 @@ class FavoritesPage extends StatelessWidget
   }
 }
 
+//class SettingsPage extends StatelessWidget{
+  /*@override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+  }*/
+//}
 
 class BigCard extends StatelessWidget {
   const BigCard({
