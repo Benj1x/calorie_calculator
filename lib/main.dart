@@ -1,6 +1,15 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:developer';
+import 'dart:async';
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:mysql_client/mysql_client.dart';
+
+//https://docs.flutter.dev/cookbook/forms/retrieve-input?gclid=CjwKCAjwscGjBhAXEiwAswQqNNMncqgxm4z0UjIb3vNB7dsvuoK1BDAt0j2WMhvTdjqQGuLyOQnGrhoCKwIQAvD_BwE&gclsrc=aw.ds
+//https://api.flutter.dev/flutter/material/TextField-class.html
+//https://flutterawesome.com/mysql-client-for-dart-written-in-dart/
 
 void main() {
   runApp(MyApp());
@@ -27,6 +36,7 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
+  var Calories= <Map>[];
 
   void getNext(){
     current = WordPair.random();
@@ -43,6 +53,11 @@ class MyAppState extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void GetCalHistory() async {
+    Calories = await GetHistory();
+    notifyListeners();
+  }
 }
 
 class MyHomePage extends StatefulWidget {
@@ -56,14 +71,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
+    var appState = context.watch<MyAppState>();
     Widget page;
     switch (selectedIndex) {
       case 0:
         page = GeneratorPage();
         break;
       case 1:
-        page = FavoritesPage();
+        page = CalorieHistoryPage();
         break;
       case 2:
         page = SettingsPage();
@@ -87,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     NavigationRailDestination(
                       icon: Icon(Icons.favorite),
-                      label: Text('Favorites'),
+                      label: Text('History'),
                     ),
                     NavigationRailDestination(
                       icon: Icon(Icons.settings),
@@ -98,6 +113,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   onDestinationSelected: (value) {
                     setState(() {
                       selectedIndex = value;
+                      if (selectedIndex == 1){
+                        appState.GetCalHistory();
+                      }
                     });
                   },
                 ),
@@ -151,7 +169,7 @@ class GeneratorPage extends StatelessWidget {
                     appState.toggleFavorites();
                   },
                   icon: Icon(icon),
-                  label: Text("Favorite"),
+                  label: Text("History"),
                 )
               ],
             ),
@@ -162,13 +180,19 @@ class GeneratorPage extends StatelessWidget {
   }
 }
 
-class FavoritesPage extends StatelessWidget
+class CalorieHistoryPage extends StatelessWidget
 {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
-    if (appState.favorites.isEmpty) {
+    var calories = appState.Calories;
+    print(calories);
+    //for(var i = 0; i < result.length; i++){
+    //  print(result[i]);
+    //}
+
+    if (calories.isEmpty) {
       return Center(
         child: Text('No favorites yet.'),
       );
@@ -179,25 +203,32 @@ class FavoritesPage extends StatelessWidget
         Padding(
           padding: const EdgeInsets.all(20),
           child: Text('You have '
-              '${appState.favorites.length} favorites:'),
+              '${calories.length} tracked days:'),
         ),
-        for (var pair in appState.favorites)
+        for (var i = 0; i < calories.length; i++)
+
           ListTile(
-            leading: Icon(Icons.favorite),
-            title: Text(pair.asLowerCase),
+            title: Text(calories[i]["Calories"].toString() + " "+ calories[i]["Date"].toString()),
           ),
       ],
     );
   }
 }
 
+/*Future<List> SendData() async{
+  await conn.connect();
+  var res = await conn.execute(
+    "INSERT INTO Calories VALUES (NULL, 0, NOW(), 1);");
+
+  await conn.close();
+}*/
+
 class SettingsPage extends StatelessWidget{
   @override
 
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-    var word = appState.current;
-
+    var loginState = appState.current;
 
     return Scaffold(
       body: Center(
@@ -205,14 +236,15 @@ class SettingsPage extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('A gamer idea:'),
-            BigCard(word: word),
+            //BigCard(word: word),
             SizedBox(height: 10),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    appState.getNext();
+
+                    //appState = Trylogin();
                   },
                   child: Text("Save"),
                 ),
@@ -226,6 +258,11 @@ class SettingsPage extends StatelessWidget{
   }
 }
 
+/*(bool, int) TryLogin(String username, String password){
+
+  return (false, 0);
+}
+*/
 class SomeTextField extends StatelessWidget {
   const SomeTextField({super.key});
 
@@ -237,7 +274,7 @@ class SomeTextField extends StatelessWidget {
         obscureText: false,
         decoration: InputDecoration(
           border: OutlineInputBorder(),
-          labelText: 'Sheets',
+          labelText: 'Username',
         ),
       ),
     );
@@ -264,4 +301,33 @@ class BigCard extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<List<Map>> GetHistory() async{
+final conn = await MySQLConnection.createConnection(
+    host: '127.0.0.1',
+    port: 3306,
+    userName: 'root',
+    password: '1234',
+    databaseName: 'calorieCal', // optional,
+  );
+
+  await conn.connect();
+  var res = await conn.execute(
+    "SELECT * FROM Calories WHERE UserID=1", {}, true);
+
+  var CalHistory = <Map>[];
+
+  res.rowsStream.listen((row) {
+    String cRow = row.assoc().toString();
+    var map = {};
+    final SplitString = cRow.split(", ");
+    map["Calories"] = SplitString[1];
+    map["Date"] = SplitString[2];
+    CalHistory.add(map);
+
+  });
+  await conn.close();
+
+  return CalHistory;
 }
