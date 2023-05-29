@@ -230,25 +230,46 @@ class SettingsPage extends StatelessWidget{
     var appState = context.watch<MyAppState>();
     var loginState = appState.current;
 
+    final myController = TextEditingController();
+
+    @override
+    void dispose() {
+      // Clean up the controller when the widget is disposed.
+      myController.dispose();
+    }
+
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('A gamer idea:'),
+            Text('Login'),
             //BigCard(word: word),
             SizedBox(height: 10),
-            Row(
+            Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                ElevatedButton(
-                  onPressed: () {
+                UserNameTextField(),
+                ObscureTextField(),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        content: Text(myController.text);
+                        //appState = Trylogin(UserNameTextField().key);
+                      },
+                      child: Text("Log In")
+                    ),
+                      ElevatedButton(
+                          onPressed: () {
 
-                    //appState = Trylogin();
-                  },
-                  child: Text("Save"),
-                ),
-                SomeTextField(),
+                            //appState = Trylogin();
+                          },
+                          child: Text("Sign Up")
+                      )
+                    ]
+                )
               ],
             ),
           ],
@@ -258,23 +279,116 @@ class SettingsPage extends StatelessWidget{
   }
 }
 
-/*(bool, int) TryLogin(String username, String password){
+Future<int> Trylogin(String username, String password) async
+{
+  final conn = await MySQLConnection.createConnection(
+    host: '127.0.0.1',
+    port: 3306,
+    userName: 'root',
+    password: '1234',
+    databaseName: 'calorieCal', // optional,
+  );
 
-  return (false, 0);
+  await conn.connect();
+  var res = await conn.execute(
+      "SELECT * FROM users WHERE Username="+username+"", {}, true);
+
+  var CalHistory = <Map>[];
+
+  print(res.length);
+  res.rowsStream.listen((row) {
+
+
+  });
+  return -1;
 }
-*/
-class SomeTextField extends StatelessWidget {
-  const SomeTextField({super.key});
+
+class LoginForm extends StatefulWidget {
+  const LoginForm({super.key});
+
+  @override
+  State<LoginForm> createState() => _LoginForm();
+}
+
+class _LoginForm extends State<LoginForm> {
+
+  final textController = TextEditingController();
+
+  @override
+  void dispose(){
+    textController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Retrieve Text Input'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: TextField(
+          controller: textController,
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        // When the user presses the button, show an alert dialog containing
+        // the text that the user has entered into the text field.
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                // Retrieve the text the that user has entered by using the
+                // TextEditingController.
+                content: Text(textController.text),
+              );
+            },
+          );
+        },
+        tooltip: 'Show me the value!',
+        child: const Icon(Icons.text_fields),
+      ),
+    );
+  }
+}
+
+class UserNameTextField extends StatelessWidget {
+  const UserNameTextField({super.key});
+
+  //final myController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return const SizedBox(
       width: 250,
       child: TextField(
+        //controller: myController,
         obscureText: false,
         decoration: InputDecoration(
           border: OutlineInputBorder(),
           labelText: 'Username',
+        ),
+      ),
+    );
+  }
+}
+
+class ObscureTextField extends StatelessWidget {
+  const ObscureTextField({super.key});
+
+  final label = "";
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(
+      width: 250,
+      child: TextField(
+        obscureText: true,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: 'password',
         ),
       ),
     );
