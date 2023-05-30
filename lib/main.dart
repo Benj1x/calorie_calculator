@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
   var Calories= <Map>[];
+  var UserID = 0;
 
   void getNext(){
     current = WordPair.random();
@@ -57,6 +58,101 @@ class MyAppState extends ChangeNotifier {
   void GetCalHistory() async {
     Calories = await GetHistory();
     notifyListeners();
+  }
+
+  void Login(String username, String password) async {
+    UserID = await TryLogin(username, password);
+    notifyListeners();
+  }
+
+  Future<int> TryLogin(String username, String password) async
+  {
+    Future<int> UserID = Future<int>.value(0);
+    final conn = await MySQLConnection.createConnection(
+      host: '127.0.0.1',
+      port: 3306,
+      userName: 'root',
+      password: '1234',
+      databaseName: 'calorieCal', // optional,
+    );
+
+    await conn.connect();
+    var res = await conn.execute(
+        "SELECT * FROM users WHERE Username='" + username + "'", {}, true);
+
+    res.rowsStream.listen((row) {
+      String cRow = row.assoc().toString();
+      final SplitString = cRow.split(", ");
+      final SplitNum = SplitString[0].split(": ");
+      print(SplitNum[1]);
+      var intID = int.parse(SplitNum[1]);
+      UserID = Future<int>.value(intID);
+    });
+
+    conn.close();
+
+    return UserID;
+
+
+  }
+
+  void SignUp(String username, String password) async {
+    bool UserExists = await CheckUserExists(username, password);
+
+    if (UserExists) {
+      //Display error
+      return;
+    }
+
+    CreateNewUser(username, password);
+
+    UserID = await TryLogin(username, password);
+
+    notifyListeners();
+  }
+
+  Future<bool> CheckUserExists(String username, String password) async{
+    Future<int> UserID = Future<int>.value(0);
+    final conn = await MySQLConnection.createConnection(
+      host: '127.0.0.1',
+      port: 3306,
+      userName: 'root',
+      password: '1234',
+      databaseName: 'calorieCal', // optional,
+    );
+
+    await conn.connect();
+    var res = await conn.execute(
+        "SELECT * FROM users WHERE Username='" + username + "'", {}, true);
+    conn.close();
+
+    //A very digusting way of returning TRUE if there is a user, and FALSE if there isn't
+    if (await res.rowsStream.isEmpty){
+      return false;
+    } {
+      return true;
+    }
+  }
+
+  /**
+   * Won't work until DB has been updated to use passwords and auto set userIDs (Statement does work though)
+   */
+  void CreateNewUser(String username, String password) async {
+    final conn = await MySQLConnection.createConnection(
+      host: '127.0.0.1',
+      port: 3306,
+      userName: 'root',
+      password: '1234',
+      databaseName: 'calorieCal', // optional,
+    );
+
+    await conn.connect();
+
+    var res = await conn.execute(
+      "INSERT INTO users VALUES (NULL, '" + username +"', '"+ password+"', 0)");
+
+    print(res.affectedRows);
+    await conn.close();
   }
 }
 
@@ -222,20 +318,27 @@ class CalorieHistoryPage extends StatelessWidget
 
   await conn.close();
 }*/
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
 
-class SettingsPage extends StatelessWidget{
+  @override
+  State<SettingsPage> createState() => _SettingsPage();
+}
+
+class _SettingsPage extends State<SettingsPage>{
   @override
 
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-    var loginState = appState.current;
 
-    final myController = TextEditingController();
+    final myUserController = TextEditingController();
+    final myPassController = TextEditingController();
 
     @override
-    void dispose() {
-      // Clean up the controller when the widget is disposed.
-      myController.dispose();
+    void dispose(){
+      myUserController.dispose();
+      myPassController.dispose();
+      super.dispose();
     }
 
     return Scaffold(
@@ -248,23 +351,42 @@ class SettingsPage extends StatelessWidget{
             SizedBox(height: 10),
             Column(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                UserNameTextField(),
-                ObscureTextField(),
+              children: [SizedBox(
+              width: 250,
+              child: TextField(
+                controller: myUserController,
+                obscureText: false,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Username',
+                ),
+              ),
+            ),
+            SizedBox(
+            width: 250,
+            child: TextField(
+              controller: myPassController,
+              obscureText: true,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'password',
+              ),
+            ),
+          ),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                     ElevatedButton(
-                      onPressed: () {
-                        content: Text(myController.text);
-                        //appState = Trylogin(UserNameTextField().key);
+                      onPressed: () async {
+                        //print(myUserController.text +" " + myPassController.text);
+                        appState.Login(myUserController.text, myPassController.text);//.timeout(Duration(seconds: 5), onTimeout: () {
                       },
                       child: Text("Log In")
                     ),
                       ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
 
-                            //appState = Trylogin();
+                            appState.SignUp(myUserController.text, myPassController.text);
                           },
                           child: Text("Sign Up")
                       )
@@ -278,9 +400,10 @@ class SettingsPage extends StatelessWidget{
     );
   }
 }
-
-Future<int> Trylogin(String username, String password) async
+/*
+Future<int> TryLogin(String username, String password) async
 {
+  Future<int> UserID = Future<int>.value(0);
   final conn = await MySQLConnection.createConnection(
     host: '127.0.0.1',
     port: 3306,
@@ -291,69 +414,21 @@ Future<int> Trylogin(String username, String password) async
 
   await conn.connect();
   var res = await conn.execute(
-      "SELECT * FROM users WHERE Username="+username+"", {}, true);
+      "SELECT * FROM users WHERE Username='"+username+"'", {}, true);
 
-  var CalHistory = <Map>[];
-
-  print(res.length);
   res.rowsStream.listen((row) {
-
-
+    String cRow = row.assoc().toString();
+    final SplitString = cRow.split(", ");
+    final SplitNum = SplitString[0].split(": ");
+    print(SplitNum[1]);
+    var intID = int.parse(SplitNum[1]);
+    UserID = Future<int>.value(intID);
   });
-  return -1;
+
+  return UserID;
+
 }
-
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
-
-  @override
-  State<LoginForm> createState() => _LoginForm();
-}
-
-class _LoginForm extends State<LoginForm> {
-
-  final textController = TextEditingController();
-
-  @override
-  void dispose(){
-    textController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Retrieve Text Input'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: TextField(
-          controller: textController,
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        // When the user presses the button, show an alert dialog containing
-        // the text that the user has entered into the text field.
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                // Retrieve the text the that user has entered by using the
-                // TextEditingController.
-                content: Text(textController.text),
-              );
-            },
-          );
-        },
-        tooltip: 'Show me the value!',
-        child: const Icon(Icons.text_fields),
-      ),
-    );
-  }
-}
-
+*/
 class UserNameTextField extends StatelessWidget {
   const UserNameTextField({super.key});
 
