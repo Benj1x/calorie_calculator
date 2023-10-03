@@ -5,11 +5,23 @@ import 'dart:developer';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:calorie_calculator/Scenes/Home.dart';
+import 'package:calorie_calculator/Scenes/Recipes.dart';
+import 'package:calorie_calculator/Scenes/CustomRecipe.dart';
+import 'package:calorie_calculator/Scenes/Favorites.dart';
+import 'package:calorie_calculator/Scenes/ManualCalories.dart';
 import 'package:mysql_client/mysql_client.dart';
 
 //https://docs.flutter.dev/cookbook/forms/retrieve-input?gclid=CjwKCAjwscGjBhAXEiwAswQqNNMncqgxm4z0UjIb3vNB7dsvuoK1BDAt0j2WMhvTdjqQGuLyOQnGrhoCKwIQAvD_BwE&gclsrc=aw.ds
 //https://api.flutter.dev/flutter/material/TextField-class.html
 //https://flutterawesome.com/mysql-client-for-dart-written-in-dart/
+
+class Data {
+  var UserID;
+  //int counter;
+  //String dateTime;
+  Data({this.UserID});
+}
 
 void main() {
   runApp(MyApp());
@@ -26,7 +38,7 @@ class MyApp extends StatelessWidget {
         title: 'Calorie Calculator',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         ),
         home: MyHomePage(),
       ),
@@ -138,6 +150,22 @@ class MyAppState extends ChangeNotifier {
     }
   }
 
+  void AddCalories(var CaloriesToAdd) async{
+    final conn = await MySQLConnection.createConnection(
+      host: '127.0.0.1',
+      port: 3306,
+      userName: 'root',
+      password: '1234',
+      databaseName: 'calorieCal', // optional,
+    );
+
+    await conn.connect();
+    var res = await conn.execute(
+    "INSERT INTO Calories VALUES (1, "+ CaloriesToAdd +", NOW(), 1);");
+
+    await conn.close();
+  }
+
   /**
    * Won't work until DB has been updated to use passwords and auto set userIDs (Statement does work though)
    */
@@ -159,21 +187,6 @@ class MyAppState extends ChangeNotifier {
     await conn.close();
   }
 
-  void AddCalories(var CaloriesToAdd) async{
-    final conn = await MySQLConnection.createConnection(
-      host: '127.0.0.1',
-      port: 3306,
-      userName: 'root',
-      password: '1234',
-      databaseName: 'calorieCal', // optional,
-    );
-
-    await conn.connect();
-    var res = await conn.execute(
-        "INSERT INTO Calories VALUES (NULL, "+ CaloriesToAdd.toString() +", NOW(), 1);");
-
-    await conn.close();
-  }
 }
 
 class MyHomePage extends StatefulWidget {
@@ -184,7 +197,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   var selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
@@ -192,51 +204,80 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget page;
     switch (selectedIndex) {
       case 0:
-        page = GeneratorPage();
+        page = Home();
         break;
       case 1:
-        page = CalorieOverview();
+        page = Recipes();
         break;
       case 2:
-        page = LoginPage();
+        page = CustomRecipe();
         break;
       case 3:
-        page = Settings();
+        page = ManualCalories();
         break;
       case 4:
-        page = CalorieOverview();
+        page = CustomRecipe();
         break;
       case 5:
-        page = Settings();
+        page = CustomRecipe();
         break;
       default:
-        throw UnimplementedError('no widget for $selectedIndex');
+        page = Recipes();
+        //throw UnimplementedError('no widget for $selectedIndex');
     }
 
     return LayoutBuilder(
       builder: (context, constraints) {
         return Scaffold(
-          body: Row(,
+          body: Row(
             children: [
               SafeArea(
                 child: NavigationRail(
+                  backgroundColor: Color(0xff121212),
                   extended: constraints.maxWidth >= 600,
                   destinations: [
                     NavigationRailDestination(
-                      icon: Icon(Icons.home, color: Color(0xff03dac5)),
-                      label: Text('Home'),
+                      icon: Icon(Icons.home, color: Color(0xff05dfc9)),
+                      label: Text('Home',
+                        style: TextStyle(
+                        color: Color(0xffffffff),
+                      ),
+                      ),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.history, color: Color(0xff03dac5)),
-                      label: Text('History'),
+                      icon: Icon(Icons.settings, color: Color(0xff05dfc9)),
+                      label: Text('Add Recipe',
+                        style: TextStyle(
+                          color: Color(0xffffffff),
+                        ),),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.favorite, color: Color(0xff03dac5)),
-                      label: Text('Favorites'),
+                      icon: Icon(Icons.favorite, color: Color(0xff05dfc9)),
+                      label: Text('History',
+                        style: TextStyle(
+                          color: Color(0xffffffff),
+                        ),),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.settings, color: Color(0xff03dac5)),
-                      label: Text('Settings'),
+                      icon: Icon(Icons.settings, color: Color(0xff05dfc9)),
+                      label: Text('Add Recipe',
+                        style: TextStyle(
+                          color: Color(0xffffffff),
+                        ),),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.settings, color: Color(0xff05dfc9)),
+                      label: Text('Manual calories',
+                        style: TextStyle(
+                          color: Color(0xffffffff),
+                        ),),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.settings, color: Color(0xff05dfc9)),
+                      label: Text('Add Recipe',
+                        style: TextStyle(
+                          color: Color(0xffffffff),
+                        ),),
                     ),
                     NavigationRailDestination(
                       icon: Icon(Icons.favorite, color: Color(0xff03dac5)),
@@ -270,41 +311,58 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class GeneratorPage extends StatelessWidget {
-  @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-    var word = appState.current;
 
-    IconData icon;
-    if (appState.favorites.contains(word)){
-      icon = Icons.favorite;
-    } else {
-      icon = Icons.favorite_border;
+    final myCalController = TextEditingController();
+    //final myPassController = TextEditingController();
+/*
+    @override
+    void dispose(){
+      myCalController.dispose();
+      //myPassController.dispose();
+      super.dispose();
     }
-
+*/
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('A gamer idea:'),
-            BigCard(word: word),
+            Text('Login'),
+            //BigCard(word: word),
             SizedBox(height: 10),
-            Row(
+            Column(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    appState.getNext();
-                  },
-                  child: Text("Next word"),
+              children: [SizedBox(
+                width: 250,
+                child: TextField(
+                  controller: myCalController,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Calories',
+                  ),
                 ),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    appState.toggleFavorites();
-                  },
-                  icon: Icon(icon),
-                  label: Text("History"),
+              ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () async {
+                            //print(myUserController.text +" " + myPassController.text);
+                            appState.AddCalories(myCalController.text);//.timeout(Duration(seconds: 5), onTimeout: () {
+                          },
+                          child: Text("Log In")
+                      ),
+                      ElevatedButton(
+                          onPressed: () async {
+
+                            //appState.SignUp(myUserController.text, myPassController.text);
+                          },
+                          child: Text("Sign Up")
+                      )
+                    ]
                 )
               ],
             ),
@@ -1166,6 +1224,8 @@ class _LoginPage extends State<LoginPage>{
     final myUserController = TextEditingController();
     final myPassController = TextEditingController();
 
+    final Data data;
+
     @override
     void dispose(){
       myUserController.dispose();
@@ -1201,7 +1261,7 @@ class _LoginPage extends State<LoginPage>{
               obscureText: true,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'password',
+                labelText: 'Password',
               ),
             ),
           ),
