@@ -78,7 +78,7 @@ class ManualCalories extends StatelessWidget {
             Padding(
               padding: EdgeInsets.all(16),
               child: Text(
-                "Want to manually input calories today?",
+                "Want to manually input calories for this meal?",
                 textAlign: TextAlign.start,
                 overflow: TextOverflow.clip,
                 style: TextStyle(
@@ -100,7 +100,7 @@ class ManualCalories extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                   fontStyle: FontStyle.normal,
                   fontSize: 14,
-                  color: Color(0xff000000),
+                  color: Color(0xffffffff),
                 ),
                 decoration: InputDecoration(
                   disabledBorder: OutlineInputBorder(

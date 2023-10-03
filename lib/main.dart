@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:calorie_calculator/Scenes/Home.dart';
 import 'package:calorie_calculator/Scenes/Recipes.dart';
 import 'package:calorie_calculator/Scenes/CustomRecipe.dart';
-import 'package:calorie_calculator/Scenes/Favorites.dart';
 import 'package:calorie_calculator/Scenes/ManualCalories.dart';
 import 'package:mysql_client/mysql_client.dart';
 
@@ -210,10 +209,10 @@ class _MyHomePageState extends State<MyHomePage> {
         page = Recipes();
         break;
       case 2:
-        page = CustomRecipe();
+        page = ManualCalories();
         break;
       case 3:
-        page = ManualCalories();
+        page = CustomRecipe();
         break;
       case 4:
         page = CustomRecipe();

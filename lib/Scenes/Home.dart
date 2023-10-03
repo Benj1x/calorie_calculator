@@ -1,8 +1,12 @@
 ///File download from FlutterViz- Drag and drop a tools. For more details visit https://flutterviz.io/
-
+import 'package:flutter/foundation.dart';
+import 'package:calorie_calculator/Scenes/Favorites.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {
+  set page(Favorites page) {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,16 +62,45 @@ class Home extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              Text(
-                                "Hello {name}!", //Set only {name} color to 0xff05dfc9
-                                textAlign: TextAlign.start,
-                                overflow: TextOverflow.clip,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontStyle: FontStyle.normal,
-                                  fontSize: 20,
-                                  color: Color(0xffffffff),
-                                ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Text(
+                                    "Hello ",
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontStyle: FontStyle.normal,
+                                      fontSize: 20,
+                                      color: Color(0xffffffff),
+                                    ),
+                                  ),
+                                  Text(
+                                    "{name}",
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontStyle: FontStyle.normal,
+                                      fontSize: 20,
+                                      color: Color(0xff05dfc9),
+                                    ),
+                                  ),
+                                  Text(
+                                    "!",
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontStyle: FontStyle.normal,
+                                      fontSize: 20,
+                                      color: Color(0xffffffff),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -160,186 +193,191 @@ class Home extends StatelessWidget {
                       endIndent: 0,
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Icon(
-                            Icons.favorite_border,
-                            color: Color(0xff03dac5),
-                            size: 24,
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: ListTile(
+                        onTap: () => page = Favorites(),
+                        tileColor: Color(0xffffff),
+                        title: Text(
+                          "Your favorites",
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.clip,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontStyle: FontStyle.normal,
+                            fontSize: 16,
+                            color: Color(0xffffffff),
                           ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                            child: Text(
-                              "Your favorite recipes",
-                              textAlign: TextAlign.start,
-                              overflow: TextOverflow.clip,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontStyle: FontStyle.normal,
-                                fontSize: 16,
-                                color: Color(0xffffffff),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
+                        dense: false,
+                        contentPadding: EdgeInsets.all(0),
+                        selected: false,
+                        selectedTileColor: Color(0x42000000),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        leading: Icon(Icons.favorite_border, color: Color(0xff03dac5), size: 24),
+                        trailing: Icon(Icons.arrow_forward_ios,
+                            color: Color(0xff808080), size: 18),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Icon(
-                            Icons.sync,
-                            color: Color(0xff03dac5),
-                            size: 24,
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: ListTile(
+                        onTap: () => debugPrint("Download"),
+                        tileColor: Color(0xffffff),
+                        title: Text(
+                          "Download your data (.CSV)",
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.clip,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontStyle: FontStyle.normal,
+                            fontSize: 16,
+                            color: Color(0xffffffff),
                           ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                            child: Text(
-                              "Download data",
-                              textAlign: TextAlign.start,
-                              overflow: TextOverflow.clip,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontStyle: FontStyle.normal,
-                                fontSize: 16,
-                                color: Color(0xffffffff),
+                        ),
+                        dense: false,
+                        contentPadding: EdgeInsets.all(0),
+                        selected: false,
+                        selectedTileColor: Color(0x42000000),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        leading: Icon(Icons.sync, color: Color(0xff03dac5), size: 24),
+                        trailing: Icon(Icons.arrow_forward_ios,
+                            color: Color(0xff808080), size: 18),
+                      ),
+                    ), //------------------------------------------
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: ListTile(
+                        onTap: () => debugPrint("Friends"),
+                        tileColor: Color(0xffffff),
+                        title: Text(
+                          "Tell Your Friends",
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.clip,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontStyle: FontStyle.normal,
+                            fontSize: 16,
+                            color: Color(0xffffffff),
                               ),
-                            ),
-                          ),
-                        ],
+                        ),
+                        dense: false,
+                        contentPadding: EdgeInsets.all(0),
+                        selected: false,
+                        selectedTileColor: Color(0x42000000),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        leading: Icon(Icons.person, color: Color(0xff03dac5), size: 24),
+                        trailing: Icon(Icons.arrow_forward_ios,
+                            color: Color(0xff808080), size: 18),
                       ),
                     ),
+                    //---------------------------------------------
                     Padding(
-                      padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Icon(
-                            Icons.person,
-                            color: Color(0xff03dac5),
-                            size: 24,
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: ListTile(
+                        onTap: () => _launchUrl(),
+                        tileColor: Color(0xffffff),
+                        title: Text(
+                          "Buy the developer a coffee",
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.clip,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontStyle: FontStyle.normal,
+                            fontSize: 16,
+                            color: Color(0xffffffff),
                           ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                            child: Text(
-                              "Tell Your Friends",
-                              textAlign: TextAlign.start,
-                              overflow: TextOverflow.clip,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontStyle: FontStyle.normal,
-                                fontSize: 16,
-                                color: Color(0xffffffff),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
+                        dense: false,
+                        contentPadding: EdgeInsets.all(0),
+                        selected: false,
+                        selectedTileColor: Color(0x42000000),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        leading: Icon(Icons.attach_money, color: Color(0xff03dac5), size: 24),
+                        trailing: Icon(Icons.arrow_forward_ios,
+                            color: Color(0xff808080), size: 18),
                       ),
-                    ),
+                    ),//----------------------------------------------------------------------
                     Padding(
                       padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Icon(
-                            Icons.attach_money,
-                            color: Color(0xff03dac5),
-                            size: 24,
+                      child: ListTile(
+                        onTap: () => debugPrint("Logout"),
+                        tileColor: Color(0xffffff),
+                        title: Text(
+                          "Logout",
+                          style: TextStyle(
+                            color: Color(0xffffffff),
+                            //EdgeInsets.fromLTRB(8, 0, 0, 0),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            fontStyle: FontStyle.normal,
                           ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                            child: Text(
-                              "Buy the developer a coffee",
-                              textAlign: TextAlign.start,
-                              overflow: TextOverflow.clip,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontStyle: FontStyle.normal,
-                                fontSize: 16,
-                                color: Color(0xffffffff),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Icon(
-                            Icons.logout,
-                            color: Color(0xffe81d20),
-                            size: 24,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                            child: Text(
-                              "Logout",
-                              textAlign: TextAlign.start,
-                              overflow: TextOverflow.clip,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontStyle: FontStyle.normal,
-                                fontSize: 16,
-                                color: Color(0xffffffff),
-                              ),
-                            ),
-                          ),
-                        ],
+                          textAlign: TextAlign.left,
+                        ),
+                        dense: false,
+                        contentPadding: EdgeInsets.all(0),
+                        selected: false,
+                        selectedTileColor: Color(0x42000000),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        leading: Icon(Icons.logout, color: Color(0xffff0004), size: 24),
+                        trailing: Icon(Icons.arrow_forward_ios,
+                            color: Color(0xff808080), size: 18),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Icon(
-                            Icons.delete,
-                            color: Color(0xffff0004),
-                            size: 24,
+                      child: ListTile(
+                        onTap: () => debugPrint("Delete"),
+                        tileColor: Color(0xffffff),
+                        title: Text(
+                          "Delete Account",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900,
+                            fontStyle: FontStyle.normal,
+                            color: Color(0xffff0000),
                           ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                            child: Text(
-                              "Delete Account",
-                              textAlign: TextAlign.start,
-                              overflow: TextOverflow.clip,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontStyle: FontStyle.normal,
-                                fontSize: 16,
-                                color: Color(0xffff0000),
-                              ),
-                            ),
-                          ),
-                        ],
+
+                          textAlign: TextAlign.left,
+                        ),
+                        dense: false,
+                        contentPadding: EdgeInsets.all(0),
+                        selected: false,
+                        selectedTileColor: Color(0x42000000),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        leading: Icon(Icons.delete, color: Color(0xffff0004), size: 24),
+                        trailing: Icon(Icons.arrow_forward_ios,
+                            color: Color(0xff808080), size: 18),
                       ),
                     ),
-                  ],
-                ),
+                ]),
               ),
             ),
           ],
         ),
       ),
     );
+  }
+}
+
+final Uri url = Uri.parse('https://flutter.dev');
+
+Future<void> _launchUrl() async {
+
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }
