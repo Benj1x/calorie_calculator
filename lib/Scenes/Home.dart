@@ -371,7 +371,7 @@ class Home extends StatelessWidget {
   }
 }
 
-final Uri url = Uri.parse('https://flutter.dev');
+final Uri url = Uri.parse('https://ko-fi.com/benj1');
 
 Future<void> _launchUrl() async {
 

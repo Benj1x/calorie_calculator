@@ -46,24 +46,33 @@ class Recipes extends StatelessWidget {
                     child: Container(
                       alignment: Alignment.center,
                       margin: EdgeInsets.fromLTRB(0, 0, 4, 0),
-                      padding: EdgeInsets.all(8),
-                      width: 200,
+                      padding: EdgeInsets.all(0),
+                      width: 100,
                       height: 40,
                       decoration: BoxDecoration(
                         color: Color(0xff121212),
                         shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.zero,
                       ),
-                      child: Text(
-                        "Sort by",
-                        textAlign: TextAlign.start,
-                        overflow: TextOverflow.clip,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontStyle: FontStyle.normal,
-                          fontSize: 14,
-                          color: Color(0xff03dac5),
+                      child: MaterialButton(
+                        onPressed: () {},
+                        color: Color(0x00000000),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
                         ),
+                        padding: EdgeInsets.all(0),
+                        child: Text(
+                          "Sort by",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.normal,
+                          ),
+                        ),
+                        textColor: Color(0xff03dac5),
+                        height: MediaQuery.of(context).size.height,
+                        minWidth: MediaQuery.of(context).size.width,
                       ),
                     ),
                   ),
@@ -72,24 +81,33 @@ class Recipes extends StatelessWidget {
                     child: Container(
                       alignment: Alignment.center,
                       margin: EdgeInsets.all(0),
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(0),
                       width: MediaQuery.of(context).size.width,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Color(0xff121212),
+                        color: Color(0x00000000),
                         shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.zero,
                       ),
-                      child: Text(
-                        "Filter by",
-                        textAlign: TextAlign.start,
-                        overflow: TextOverflow.clip,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontStyle: FontStyle.normal,
-                          fontSize: 14,
-                          color: Color(0xff03dac5),
+                      child: MaterialButton(
+                        onPressed: () {},
+                        color: Color(0xff121212),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
                         ),
+                        padding: EdgeInsets.all(0),
+                        child: Text(
+                          "Filter by",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.normal,
+                          ),
+                        ),
+                        textColor: Color(0xff03dac5),
+                        height: MediaQuery.of(context).size.height,
+                        minWidth: MediaQuery.of(context).size.width,
                       ),
                     ),
                   ),

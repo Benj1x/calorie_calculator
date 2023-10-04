@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-class CustomRecipe extends StatelessWidget {
+class RecipeDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +16,7 @@ class CustomRecipe extends StatelessWidget {
           borderRadius: BorderRadius.zero,
         ),
         title: Text(
-          "Custom Recipe",
+          "Recipe Details",
           style: TextStyle(
             fontWeight: FontWeight.w700,
             fontStyle: FontStyle.normal,
@@ -44,6 +44,14 @@ class CustomRecipe extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
                   children: [
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Icon(
+                        Icons.favorite_border,
+                        color: Color(0xff03dac5),
+                        size: 24,
+                      ),
+                    ),
                     Padding(
                       padding:
                       EdgeInsets.symmetric(vertical: 16, horizontal: 0),
@@ -72,7 +80,7 @@ class CustomRecipe extends StatelessWidget {
                           Expanded(
                             flex: 1,
                             child: Text(
-                              "Recipe name",
+                              "{Recipe name}",
                               textAlign: TextAlign.start,
                               overflow: TextOverflow.clip,
                               style: TextStyle(
@@ -131,86 +139,26 @@ class CustomRecipe extends StatelessWidget {
                             color: Color(0xff000000),
                           ),
                         ),
-                        TextField(
-                          controller: TextEditingController(),
-                          obscureText: false,
+                        Text(
+                          "{ingredients}",
                           textAlign: TextAlign.start,
-                          maxLines: 1,
+                          overflow: TextOverflow.clip,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontStyle: FontStyle.normal,
                             fontSize: 14,
                             color: Color(0xff000000),
-                          ),
-                          decoration: InputDecoration(
-                            disabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(4.0),
-                              borderSide: BorderSide(
-                                  color: Color(0xff000000), width: 1),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(4.0),
-                              borderSide: BorderSide(
-                                  color: Color(0xff000000), width: 1),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(4.0),
-                              borderSide: BorderSide(
-                                  color: Color(0xff000000), width: 1),
-                            ),
-                            hintText: "ingredient list",
-                            hintStyle: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontStyle: FontStyle.normal,
-                              fontSize: 14,
-                              color: Color(0xff000000),
-                            ),
-                            filled: false,
-                            fillColor: Color(0xfff2f2f3),
-                            isDense: false,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 12),
                           ),
                         ),
-                        TextField(
-                          controller: TextEditingController(),
-                          obscureText: false,
+                        Text(
+                          "{course of action}",
                           textAlign: TextAlign.start,
-                          maxLines: 1,
+                          overflow: TextOverflow.clip,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontStyle: FontStyle.normal,
                             fontSize: 14,
                             color: Color(0xff000000),
-                          ),
-                          decoration: InputDecoration(
-                            disabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(4.0),
-                              borderSide: BorderSide(
-                                  color: Color(0xff000000), width: 1),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(4.0),
-                              borderSide: BorderSide(
-                                  color: Color(0xff000000), width: 1),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(4.0),
-                              borderSide: BorderSide(
-                                  color: Color(0xff000000), width: 1),
-                            ),
-                            hintText: "{course of action}",
-                            hintStyle: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontStyle: FontStyle.normal,
-                              fontSize: 14,
-                              color: Color(0xff000000),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xfff2f2f3),
-                            isDense: false,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 12),
                           ),
                         ),
                       ],
@@ -235,45 +183,37 @@ class CustomRecipe extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        TextField(
-                          controller: TextEditingController(),
-                          obscureText: false,
+                        Text(
+                          "Text",
                           textAlign: TextAlign.start,
-                          maxLines: 1,
+                          overflow: TextOverflow.clip,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontStyle: FontStyle.normal,
                             fontSize: 14,
                             color: Color(0xff000000),
                           ),
-                          decoration: InputDecoration(
-                            disabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(4.0),
-                              borderSide: BorderSide(
-                                  color: Color(0xff000000), width: 1),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(4.0),
-                              borderSide: BorderSide(
-                                  color: Color(0xff000000), width: 1),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(4.0),
-                              borderSide: BorderSide(
-                                  color: Color(0xff000000), width: 1),
-                            ),
-                            hintText: "Values (automatic??)",
-                            hintStyle: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontStyle: FontStyle.normal,
-                              fontSize: 14,
-                              color: Color(0xff000000),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xfff2f2f3),
-                            isDense: false,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 12),
+                        ),
+                        Text(
+                          "Text",
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.clip,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.normal,
+                            fontSize: 14,
+                            color: Color(0xff000000),
+                          ),
+                        ),
+                        Text(
+                          "Text",
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.clip,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.normal,
+                            fontSize: 14,
+                            color: Color(0xff000000),
                           ),
                         ),
                       ],
@@ -385,7 +325,7 @@ class CustomRecipe extends StatelessWidget {
                   ),
                   padding: EdgeInsets.all(16),
                   child: Text(
-                    "Add",
+                    "Add to cart",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w400,

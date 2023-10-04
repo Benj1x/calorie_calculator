@@ -1,3 +1,4 @@
+import 'package:calorie_calculator/scenes/CalorieHistory.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -209,19 +210,16 @@ class _MyHomePageState extends State<MyHomePage> {
         page = Recipes();
         break;
       case 2:
-        page = ManualCalories();
+        page = CustomRecipe();
         break;
       case 3:
-        page = CustomRecipe();
+        page = ManualCalories();
         break;
       case 4:
-        page = CustomRecipe();
-        break;
-      case 5:
-        page = CustomRecipe();
+        page = CalorieHistory();
         break;
       default:
-        page = Recipes();
+        page = Home();
         //throw UnimplementedError('no widget for $selectedIndex');
     }
 
@@ -244,45 +242,33 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.settings, color: Color(0xff05dfc9)),
+                      icon: Icon(Icons.article, color: Color(0xff05dfc9)),
+                      label: Text('Recipes',
+                        style: TextStyle(
+                          color: Color(0xffffffff),
+                        ),),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.add_circle, color: Color(0xff05dfc9)),
                       label: Text('Add Recipe',
                         style: TextStyle(
                           color: Color(0xffffffff),
                         ),),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.favorite, color: Color(0xff05dfc9)),
-                      label: Text('History',
-                        style: TextStyle(
-                          color: Color(0xffffffff),
-                        ),),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.settings, color: Color(0xff05dfc9)),
-                      label: Text('Add Recipe',
-                        style: TextStyle(
-                          color: Color(0xffffffff),
-                        ),),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.settings, color: Color(0xff05dfc9)),
+                      icon: Icon(Icons.edit, color: Color(0xff05dfc9)),
                       label: Text('Manual calories',
                         style: TextStyle(
                           color: Color(0xffffffff),
                         ),),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.settings, color: Color(0xff05dfc9)),
-                      label: Text('Add Recipe',
+                      icon: Icon(Icons.history, color: Color(0xff05dfc9)),
+                      label: Text('Calories history',
                         style: TextStyle(
                           color: Color(0xffffffff),
                         ),),
                     ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.favorite, color: Color(0xff03dac5)),
-                      label: Text('History'),
-                    ),
-
                   ],
                   selectedIndex: selectedIndex,
                   onDestinationSelected: (value) {
