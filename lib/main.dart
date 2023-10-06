@@ -200,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-    appState.AddCalories(1000);
+    //appState.AddCalories(1000);
     Widget page;
     switch (selectedIndex) {
       case 0:
