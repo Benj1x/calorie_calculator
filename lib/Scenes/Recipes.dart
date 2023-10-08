@@ -21,7 +21,8 @@ class Recipes extends StatelessWidget {
             fontWeight: FontWeight.w700,
             fontStyle: FontStyle.normal,
             fontSize: 18,
-            color: Color(0xff000000),
+            backgroundColor: Color(0x121222),
+            color: Color(0xff03dac5),
           ),
         ),
         leading: Icon(

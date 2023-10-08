@@ -6,7 +6,7 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0x42000000),
+      backgroundColor: Color(0xff121212),
       body: Align(
         alignment: Alignment.centerLeft,
         child: Padding(

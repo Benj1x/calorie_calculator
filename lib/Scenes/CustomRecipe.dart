@@ -6,7 +6,7 @@ class CustomRecipe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffffffff),
+      backgroundColor: Color(0xff121212),
       appBar: AppBar(
         elevation: 3,
         centerTitle: true,

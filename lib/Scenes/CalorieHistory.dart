@@ -6,12 +6,12 @@ class CalorieHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xfff7f7f7),
+      backgroundColor: Color(0xff121212),
       appBar: AppBar(
         elevation: 0,
         centerTitle: false,
         automaticallyImplyLeading: false,
-        backgroundColor: Color(0xff000000),
+        backgroundColor: Color(0xff121212),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.zero,
         ),
