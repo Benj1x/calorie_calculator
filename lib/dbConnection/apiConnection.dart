@@ -22,7 +22,7 @@ void SignUp(String email, String username, String password) async {
 
   CreateNewUser(email, username, password);
 
-  int UserID = await TryLogin(username, password);
+  bool test = await TryLogin(username, password);
 
 }
 
@@ -52,22 +52,24 @@ Future<bool> CheckUserExists(String email, String password) async{
     return true;
   }
 }
+
+String UserID = "0";
+String Username = "";
+String CalorieGoal = "";
 /**
  * Log in, what else is there to say
  */
-int UserID = -1;
-
-void Login(String Email, String password) async
+Future<bool> Login(String Email, String password) async
 {
-  UserID = await TryLogin(Email, password);
+  return await TryLogin(Email, password);
 }
 /**
  * Attempts to login the user, on success saves the UserID (Should also save username), and stores it for later use
  */
 
-Future<int> TryLogin(String email, String password) async
+Future<bool> TryLogin(String email, String password) async
 {
-  Future<int> FUserID = Future<int>.value(0);
+  bool loginSucces = false;
   final conn = await MySQLConnection.createConnection(
     host: '127.0.0.1',
     port: 3306,
@@ -84,14 +86,20 @@ Future<int> TryLogin(String email, String password) async
     String cRow = row.assoc().toString();
     final SplitString = cRow.split(", ");
     final SplitNum = SplitString[0].split(": ");
-    print(SplitNum[1]);
-    var intID = int.parse(SplitNum[1]);
-    FUserID = Future<int>.value(intID);
+
+    UserID = SplitNum[1];
+
+    final usernameSubString = SplitString[2].split("Username: ");
+    Username = usernameSubString[1];
+
+    final calorieSubString = SplitString[4].split("CalorieGoal: ");
+    CalorieGoal = calorieSubString[1].replaceAll("}", "");
+    loginSucces = true;
   });
 
   conn.close();
 
-  return UserID;
+  return loginSucces;
 }
 /**
  * Adds calories for a meal using the [UserID] & [CaloriesToAdd] variables

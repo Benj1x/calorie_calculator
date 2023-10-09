@@ -1,5 +1,6 @@
 ///File download from FlutterViz- Drag and drop a tools. For more details visit https://flutterviz.io/
 
+import 'package:calorie_calculator/main.dart';
 import 'package:flutter/material.dart';
 import 'package:calorie_calculator/dbConnection/apiConnection.dart';
 
@@ -15,6 +16,7 @@ class _LoginPage extends State<LoginPage> {
 
   final EmailController = TextEditingController();
   final PasswordController = TextEditingController();
+
 
   @override
   void initState(){
@@ -208,18 +210,8 @@ class _LoginPage extends State<LoginPage> {
                   child: MaterialButton(
                     onPressed: ()
                     {
-                      Login(EmailController.text, PasswordController.text);
-                      Future.delayed(const Duration(seconds: 2)).then((val) {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              // Retrieve the text the that user has entered by using the
-                              // TextEditingController.
-                              content: Text(UserID.toString()),
-                            );
-                          },
-                        );
+                      bool loginSucces = Login(EmailController.text, PasswordController.text) as bool;
+                      Future.delayed(const Duration(seconds: 1)).then((val) { //Wait until X, unless value is recieved?
                       });
                       },
                     color: Color(0xff03dac5),

@@ -76,15 +76,17 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  var selectedIndex = 0;
+  var selectedIndex = -1;
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-    //+appState.CreateNewUser("Some@email.com", "TestUser", "abc123");
     Widget page;
     switch (selectedIndex) {
-      case 0:
+      case -1:
         page = LoginPage();
+        break;
+      case 0:
+        page = Home();
         break;
       case 1:
         page = Recipes();
