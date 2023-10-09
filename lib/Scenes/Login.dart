@@ -1,8 +1,27 @@
 ///File download from FlutterViz- Drag and drop a tools. For more details visit https://flutterviz.io/
 
 import 'package:flutter/material.dart';
+import 'package:calorie_calculator/dbConnection/apiConnection.dart';
 
-class Login extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPage();
+}
+
+class _LoginPage extends State<LoginPage> {
+  bool obscured = true;
+
+  final EmailController = TextEditingController();
+  final PasswordController = TextEditingController();
+
+  @override
+  void initState(){
+    super.initState();
+    obscured = true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +78,7 @@ class Login extends StatelessWidget {
                   ),
                 ),
                 TextField(
-                  controller: TextEditingController(text: "example@gmail.com"),
+                  controller: EmailController,
                   obscureText: false,
                   textAlign: TextAlign.start,
                   maxLines: 1,
@@ -78,12 +97,12 @@ class Login extends StatelessWidget {
                     focusedBorder: UnderlineInputBorder(
                       borderRadius: BorderRadius.circular(4.0),
                       borderSide:
-                      BorderSide(color: Color(0xff000000), width: 1),
+                      BorderSide(color: Color(0xffffffff), width: 1),
                     ),
                     enabledBorder: UnderlineInputBorder(
                       borderRadius: BorderRadius.circular(4.0),
                       borderSide:
-                      BorderSide(color: Color(0xff000000), width: 1),
+                      BorderSide(color: Color(0xffffffff), width: 1),
                     ),
                     labelText: "Email",
                     labelStyle: TextStyle(
@@ -92,12 +111,12 @@ class Login extends StatelessWidget {
                       fontSize: 16,
                       color: Color(0xff03dac5),
                     ),
-                    hintText: "Enter Text",
+                    hintText: "example@email.com",
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       fontSize: 14,
-                      color: Color(0xff000000),
+                      color: Color(0xffffffff),
                     ),
                     filled: true,
                     fillColor: Color(0x00ffffff),
@@ -108,8 +127,8 @@ class Login extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 16, horizontal: 0),
                   child: TextField(
-                    controller: TextEditingController(text: "123456"),
-                    obscureText: true,
+                    controller: PasswordController,
+                    obscureText: obscured,
                     textAlign: TextAlign.start,
                     maxLines: 1,
                     style: TextStyle(
@@ -122,17 +141,17 @@ class Login extends StatelessWidget {
                       disabledBorder: UnderlineInputBorder(
                         borderRadius: BorderRadius.circular(4.0),
                         borderSide:
-                        BorderSide(color: Color(0xff000000), width: 1),
+                        BorderSide(color: Color(0xffffffff), width: 1),
                       ),
                       focusedBorder: UnderlineInputBorder(
                         borderRadius: BorderRadius.circular(4.0),
                         borderSide:
-                        BorderSide(color: Color(0xff000000), width: 1),
+                        BorderSide(color: Color(0xffffffff), width: 1),
                       ),
                       enabledBorder: UnderlineInputBorder(
                         borderRadius: BorderRadius.circular(4.0),
                         borderSide:
-                        BorderSide(color: Color(0xff000000), width: 1),
+                        BorderSide(color: Color(0xffffffff), width: 1),
                       ),
                       labelText: "Password",
                       labelStyle: TextStyle(
@@ -146,15 +165,28 @@ class Login extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         fontSize: 14,
-                        color: Color(0xfffcfcfc),
+                        color: Color(0xffffffff),
                       ),
                       filled: true,
                       fillColor: Color(0x00ffffff),
                       isDense: false,
                       contentPadding: EdgeInsets.all(0),
-                      suffixIcon: Icon(Icons.visibility,
-                          color: Color(0xff7b7c82), size: 24),
+                      suffixIcon: IconButton(
+                        icon: Icon(obscured
+                            ? Icons.visibility
+                            : Icons.visibility_off, color: Color(0xff03dac5)) ,
+                        onPressed: () {
+                          setState(
+                                () {
+                                  obscured = !obscured;
+                            },
+                          );
+                        },
+                      ),
+                      alignLabelWithHint: false,
                     ),
+                    keyboardType: TextInputType.visiblePassword,
+                    textInputAction: TextInputAction.done,
                   ),
                 ),
                 Align(
@@ -174,7 +206,22 @@ class Login extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 30, 0, 50),
                   child: MaterialButton(
-                    onPressed: () {},
+                    onPressed: ()
+                    {
+                      Login(EmailController.text, PasswordController.text);
+                      Future.delayed(const Duration(seconds: 2)).then((val) {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              // Retrieve the text the that user has entered by using the
+                              // TextEditingController.
+                              content: Text(UserID.toString()),
+                            );
+                          },
+                        );
+                      });
+                      },
                     color: Color(0xff03dac5),
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -195,7 +242,7 @@ class Login extends StatelessWidget {
                   ),
                 ),
                 MaterialButton(
-                  onPressed: () {},
+                  onPressed: () { },
                   color: Color(0xff03dac5),
                   elevation: 0,
                   shape: RoundedRectangleBorder(
