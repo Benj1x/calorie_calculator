@@ -1,4 +1,7 @@
+import 'dart:collection';
+
 import 'package:calorie_calculator/scenes/CalorieHistory.dart';
+import 'package:calorie_calculator/tempUtils.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -60,7 +63,9 @@ class MyAppState extends test {
 
   @override
   void thing() {
+    // TODO: implement thing
     super.thing();
+    Calories.length;
   }
 
   var favorites = <WordPair>[];
@@ -77,10 +82,20 @@ class MyAppState extends test {
 
 abstract class test extends ChangeNotifier{
 
+  UserData userData = new UserData();
+  CalorieData calorieData = new CalorieData();
+
+  doDB THEdB = new doDB();
   String Calories = "500";
   void thing(){
-    GetAllCalories();
+    Map<String, String> Calories = HashMap();
+    Future<Map<String, String>> FutureCalories = THEdB.GetAllCalories().then((value) => Calories);
+
+    Calories.length;
+
   }
+
+
 
 }
 

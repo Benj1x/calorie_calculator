@@ -1,6 +1,8 @@
 ///File download from FlutterViz- Drag and drop a tools. For more details visit https://flutterviz.io/
 
 import 'package:flutter/material.dart';
+import 'package:calorie_calculator/dbConnection/apiConnection.dart';
+import 'package:calorie_calculator/tempUtils.dart';
 
 class ManualCalories extends StatelessWidget {
   @override
@@ -39,7 +41,7 @@ class ManualCalories extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          "{name}!",
+                          userData.Username+"!",
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.clip,
                           style: TextStyle(

@@ -210,7 +210,7 @@ class _LoginPage extends State<LoginPage> {
                   child: MaterialButton(
                     onPressed: ()
                     {
-                      bool loginSucces = Login(EmailController.text, PasswordController.text) as bool;
+                      //bool loginSucces = Login(EmailController.text, PasswordController.text) as bool;
                       Future.delayed(const Duration(seconds: 1)).then((val) { //Wait until X, unless value is recieved?
                       });
                       },

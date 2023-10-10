@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:calorie_calculator/Scenes/Favorites.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
+import 'package:calorie_calculator/tempUtils.dart';
+import 'package:calorie_calculator/dbConnection/apiConnection.dart';
 
 class Home extends StatelessWidget {
   set page(Favorites page) {}
@@ -79,7 +81,7 @@ class Home extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    "{name}",
+                                    userData.Username,
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(

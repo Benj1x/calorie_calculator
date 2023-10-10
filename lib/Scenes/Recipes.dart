@@ -1,8 +1,28 @@
 ///File download from FlutterViz- Drag and drop a tools. For more details visit https://flutterviz.io/
 
 import 'package:flutter/material.dart';
+import 'package:calorie_calculator/dbConnection/apiConnection.dart';
 
-class Recipes extends StatelessWidget {
+void CallRecipes(){
+  //GetRecipeFromID("1");
+}
+
+class Recipes extends StatefulWidget {
+  const Recipes({super.key});
+
+  @override
+  State<Recipes> createState() => _Recipes();
+
+}
+
+class _Recipes extends State<Recipes> {
+
+  void initState(){
+    super.initState();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
