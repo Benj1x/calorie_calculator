@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:calorie_calculator/Scenes/Home.dart';
 import 'package:calorie_calculator/Scenes/Login.dart';
 import 'package:calorie_calculator/Scenes/Recipes.dart';
+import 'package:calorie_calculator/dbConnection/apiConnection.dart';
 import 'package:calorie_calculator/Scenes/CustomRecipe.dart';
 import 'package:calorie_calculator/Scenes/ManualCalories.dart';
 import 'package:mysql_client/mysql_client.dart';
@@ -47,14 +48,19 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyAppState extends ChangeNotifier {
+class MyAppState extends test {
   var current = WordPair.random();
-  var Calories= <Map>[];
+  //var Calories= <Map>[];
   var UserID = 0;
 
   void getNext(){
     current = WordPair.random();
     notifyListeners();
+  }
+
+  @override
+  void thing() {
+    super.thing();
   }
 
   var favorites = <WordPair>[];
@@ -69,6 +75,15 @@ class MyAppState extends ChangeNotifier {
   }
 }
 
+abstract class test extends ChangeNotifier{
+
+  String Calories = "500";
+  void thing(){
+    GetAllCalories();
+  }
+
+}
+
 class MyHomePage extends StatefulWidget {
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -76,15 +91,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  var selectedIndex = -1;
+  var selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
+    appState.thing();
     Widget page;
     switch (selectedIndex) {
-      case -1:
-        page = LoginPage();
-        break;
       case 0:
         page = Home();
         break;

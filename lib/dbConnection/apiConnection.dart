@@ -53,7 +53,7 @@ Future<bool> CheckUserExists(String email, String password) async{
   }
 }
 
-String UserID = "0";
+String UserID = "1";
 String Username = "";
 String CalorieGoal = "";
 /**
@@ -107,7 +107,7 @@ Future<bool> TryLogin(String email, String password) async
  * this way we can use the users local time, instead of the server local time
  */
 
-void AddCalories(String UserID, String CaloriesToAdd) async{
+void AddCalories(/*String UserID, */String CaloriesToAdd) async{
   final conn = await MySQLConnection.createConnection(
     host: '127.0.0.1',
     port: 3306,
@@ -118,16 +118,22 @@ void AddCalories(String UserID, String CaloriesToAdd) async{
   final DTNow = DateTime.now().toString();
   await conn.connect();
   var res = await conn.execute(
-      "INSERT INTO Calories (UserID, CaloriesConsumed, Time) VALUES ('"+UserID+"', '"+ CaloriesToAdd +"', "+ DTNow +");");
+      "INSERT INTO Calories (UserID, CaloriesConsumed, Time) VALUES ('"+UserID+"', '"+ CaloriesToAdd +"', '"+ DTNow +"');");
 
   await conn.close();
 }
+
+class Calories{
+  String ID = "";
+  String consumed = "";
+  String Date = "";
+}
+
 /**
  * Getter function for showing all calorie data for the user
  * TODO: alternate functions would be [main.GetCaloriesDay] and a delete function
  */
-
-void GetAllCalories(String UserID) async{
+<Calories>{} GetAllCalories(/*String UserID*/) async{
   final conn = await MySQLConnection.createConnection(
     host: '127.0.0.1',
     port: 3306,
@@ -135,10 +141,31 @@ void GetAllCalories(String UserID) async{
     password: '1234',
     databaseName: 'calorieCal', // optional,
   );
-  final DTNow = DateTime.now().toString();
+
   await conn.connect();
   var res = await conn.execute(
-      "SELECT * FROM Calories WHERE UserID='"+UserID+"');");
+      "SELECT * FROM Calories WHERE UserID='"+UserID+"';", {}, true);
+
+  var Records = <Calories>{};
+  String recordedAt = "";
+  String CalorieID = "";
+  String ConsumedCalories = "";
+
+  res.rowsStream.listen((row) {
+    String something = row.toString();
+    String cRow = row.assoc().toString();
+    final SplitString = cRow.split(", ");
+
+    CalorieID = SplitString[0].split("{CalorieID: ").toString();
+
+    ConsumedCalories = SplitString[2].split(", CaloriesConsumed: ").toString();
+
+    final RecordedSubstring = SplitString[3].split(", Time: ").toString();
+
+    ConsumedCalories = RecordedSubstring[1].replaceAll("}", "").toString();
+
+
+  });
 
   await conn.close();
 }
